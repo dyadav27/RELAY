@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="web_dashboard" name="shell-type">
+    <title>RELAY - Enterprise Command Center</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+        @layer base {
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: 'Inter', sans-serif;
+            }
+
+            body {
+                overscroll-behavior: none;
+            }
+
+            main> :first-child {
+                margin-top: 0 !important;
+            }
+
+            main> :last-child {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#EEF2FF',
+                            100: '#E0E7FF',
+                            200: '#C7D2FE',
+                            300: '#A5B4FC',
+                            400: '#818CF8',
+                            500: '#6366F1',
+                            600: '#4F46E5',
+                            700: '#4338CA',
+                            800: '#3730A3',
+                            900: '#312E81',
+                        },
+                        cyan: {
+                            400: '#22D3EE',
+                            500: '#06B6D4',
+                            600: '#0891B2',
+                        },
+                        surface: {
+                            DEFAULT: '#F8FAFC',
+                            card: '#FFFFFF',
+                            border: '#E2E8F0',
+                            subtle: '#F1F5F9',
+                        },
+                        sidebar: {
+                            DEFAULT: '#0B0F19',
+                            card: '#131B2E',
+                            border: '#1E293B',
+                            hover: '#182238'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="bg-surface text-slate-900 antialiased font-sans">
+    <!-- Left Sidebar -->
+    <aside
+        class="fixed left-0 top-0 bottom-0 w-64 bg-sidebar text-slate-200 flex flex-col z-50 border-r border-slate-800/80 shadow-xl">
+        <!-- Brand / Logo Header -->
+        <div class="px-5 pt-5 pb-4 flex items-center justify-between border-b border-slate-800/60">
+            <div class="flex items-center gap-2.5">
+                <!-- Stylized Ribbon 'R' Monogram (Purple/Violet to Electric Cyan) -->
+                <div
+                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 p-[1.5px] shadow-sm shadow-indigo-500/20">
+                    <div
+                        class="w-full h-full bg-sidebar rounded-[6.5px] flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 32V8H22C26.5 8 29.5 11 29.5 15.5C29.5 19 27.2 21.8 24 22.6L31 32H24.5L18.2 23.5H16.8V32H12ZM16.8 19H21.5C23.8 19 25 17.6 25 15.5C25 13.4 23.8 12 21.5 12H16.8V19Z"
+                                fill="url(#relay_grad_sidebar)"></path>
+                            <defs>
+                                <linearGradient gradientUnits="userSpaceOnUse" id="relay_grad_sidebar" x1="12" x2="31"
+                                    y1="8" y2="32">
+                                    <stop stop-color="#818CF8"></stop>
+                                    <stop offset="0.5" stop-color="#6366F1"></stop>
+                                    <stop offset="1" stop-color="#06B6D4"></stop>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                <span class="font-bold text-lg tracking-wider text-white font-sans">RELAY</span>
+            </div>
+            <span
+                class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-cyan-300 border border-cyan-500/20 tracking-wider">
+                ENTERPRISE
+            </span>
+        </div>
+        <!-- Workspace Selector -->
+        <div class="px-4 py-3">
+            <button
+                class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-300 transition-colors border border-slate-800"
+                type="button">
+                <div class="flex items-center gap-2.5 min-w-0 text-left">
+                    <div class="w-6 h-6 rounded bg-indigo-500/10 flex items-center justify-center text-cyan-400">
+                        <span class="material-symbols-outlined text-[17px]">grid_view</span>
+                    </div>
+                    <div class="truncate">
+                        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 leading-none">
+                            Workspace</p>
+                        <p class="text-xs font-medium text-white truncate mt-0.5">Core Platform &amp; Infra</p>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-400 text-base">unfold_more</span>
+            </button>
+        </div>
+        <div class="px-5 pt-3 pb-1.5">
+            <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Operations</p>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="flex-1 px-3 flex flex-col gap-1">
+            <a aria-current="page"
+                class="group relative flex items-center justify-between px-3 py-2 rounded-lg text-white font-medium bg-gradient-to-r from-indigo-600/30 to-cyan-500/10 border border-indigo-500/30 shadow-sm"
+                data-path="overview" href="#">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-cyan-400 text-[19px]">dashboard</span>
+                    <span class="text-sm font-semibold text-white">Overview</span>
+                </div>
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400"></span>
+            </a>
+            <a class="group flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors text-sm font-medium"
+                data-path="meetings" href="#">
+                <div class="flex items-center gap-3">
+                    <span
+                        class="material-symbols-outlined text-[19px] text-slate-400 group-hover:text-indigo-400 transition-colors">video_camera_front</span>
+                    <span class="">Meetings</span>
+                </div>
+                <span
+                    class="font-mono text-[11px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700/50">14</span>
+            </a>
+            <a class="group flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors text-sm font-medium"
+                data-path="tasks" href="#">
+                <div class="flex items-center gap-3">
+                    <span
+                        class="material-symbols-outlined text-[19px] text-slate-400 group-hover:text-indigo-400 transition-colors">check_circle</span>
+                    <span class="">Tasks</span>
+                </div>
+                <span
+                    class="font-mono text-[11px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700/50">28</span>
+            </a>
+            <a class="group flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors text-sm font-medium"
+                data-path="knowledge-hub" href="#">
+                <div class="flex items-center gap-3">
+                    <span
+                        class="material-symbols-outlined text-[19px] text-slate-400 group-hover:text-indigo-400 transition-colors">menu_book</span>
+                    <span class="">Knowledge Hub</span>
+                </div>
+            </a>
+            <a class="group flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors text-sm font-medium"
+                data-path="handover-copilot" href="#">
+                <div class="flex items-center gap-3">
+                    <span
+                        class="material-symbols-outlined text-[19px] text-slate-400 group-hover:text-cyan-400 transition-colors">auto_awesome</span>
+                    <span class="">Handover Copilot</span>
+                </div>
+                <span
+                    class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gradient-to-r from-indigo-500 to-cyan-500 text-white tracking-wide shadow-sm">AI</span>
+            </a>
+        </nav>
+        <!-- Bottom Status & System Links -->
+        <div class="p-4 border-t border-slate-800/70 flex flex-col gap-3 bg-slate-950/40">
+            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800/90 flex flex-col gap-1.5">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Continuity
+                        Status</span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400"></span>
+                </div>
+                <div class="flex items-baseline justify-between">
+                    <span class="text-xs text-slate-300">Integrity Index</span>
+                    <span class="font-mono text-xs font-bold text-cyan-400">99.4%</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 pt-1">
+                <a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors"
+                    data-path="help-and-docs" href="#">
+                    <span class="material-symbols-outlined text-base">help_outline</span>
+                    <span class="">Help &amp; Docs</span>
+                </a>
+                <a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors"
+                    data-path="organization-settings" href="#">
+                    <span class="material-symbols-outlined text-base">settings</span>
+                    <span class="">Organization Settings</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+    <!-- Main Content Wrapper -->
+    <div class="pl-64">
+        <!-- Top Header -->
+        <header class="fixed top-0 left-64 right-0 z-40 bg-white/90 backdrop-blur-md border-b border-surface-border">
+            <div class="h-16 px-8 flex items-center justify-between gap-6">
+                <!-- Search Bar -->
+                <div class="flex-1 max-w-xl">
+                    <div class="relative flex items-center">
+                        <span
+                            class="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">search</span>
+                        <input
+                            class="w-full h-9 pl-9 pr-14 bg-surface rounded-lg border border-surface-border text-slate-900 placeholder:text-slate-400 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-none"
+                            placeholder="Search decisions, transcripts, action items, or RFCs..." type="text">
+                        <div class="absolute right-2.5 flex items-center pointer-events-none">
+                            <kbd
+                                class="font-mono text-[10px] bg-slate-200/70 border border-slate-300 px-1.5 py-0.5 rounded text-slate-600 font-medium">⌘K</kbd>
+                        </div>
+                    </div>
+                </div>
+                <!-- Action Tools & Profile -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <button
+                        class="h-9 px-3.5 rounded-lg border border-surface-border bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+                        type="button">
+                        <span class="material-symbols-outlined text-base text-indigo-600">auto_fix_high</span>
+                        <span class="">Generate Brief</span>
+                    </button>
+                    <button
+                        class="h-9 px-3.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+                        type="button">
+                        <span class="material-symbols-outlined text-base">add</span>
+                        <span class="">Log Meeting</span>
+                    </button>
+                    <button
+                        class="relative p-2 text-slate-500 hover:text-slate-800 transition-colors rounded-lg hover:bg-slate-100"
+                        type="button">
+                        <span class="material-symbols-outlined text-xl">notifications</span>
+                        <span
+                            class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-cyan-500 ring-2 ring-white"></span>
+                    </button>
+                    <div class="h-5 w-px bg-surface-border mx-1"></div>
+                    <div class="flex items-center gap-3 pl-1">
+                        <img alt="Elena Rostova" class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsO3NbaHeTLj1Q-lBjnwDhKyNFreDZeafLkIhYtTbllHVktAnvMfKbQyOV1jRNxZFFNk5dXfEPCQYCIniALwBpjCD7i8klJxkRos-TWnM7sh5kydjhfQLI3rb_Xf6IpIqqGk7t2z3LO4Eq4LX8qFPfxxgqbrpOJmjCSapi6_pd6oNOEw1ZhuXHffFAcUT0PS8xX-l40xA8I_Idr3MQcDR2cV0LVtV6QYmAI5_sOPh4">
+                        <div class="hidden xl:flex flex-col text-left">
+                            <span class="text-xs font-semibold text-slate-900 leading-none">Elena Rostova</span>
+                            <span class="text-[11px] text-slate-500 leading-none mt-1">Principal Product Lead</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <main class="w-full pt-16 bg-surface min-h-screen">
+            <div class="p-8 max-w-[1600px] mx-auto w-full flex flex-col gap-6">
+                <!-- Top Header & Action Controls -->
+                <section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center gap-2.5">
+                            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Command Center</h1>
+                            <span
+                                class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 text-xs font-medium">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                                Live Telemetry
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            Workspace: <span class="font-semibold text-slate-700">Core Platform &amp;
+                                Infrastructure</span>
+                            <span class="mx-2 text-slate-300">•</span>
+                            Last sync: 4 minutes ago
+                        </p>
+                    </div>
+                    <div class="flex items-center flex-wrap gap-2.5">
+                        <div class="relative inline-flex items-center">
+                            <select
+                                class="appearance-none h-9 pl-3.5 pr-8 bg-white border border-surface-border text-slate-700 text-xs font-medium rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer transition-colors">
+                                <option>All Repositories &amp; Sprints</option>
+                                <option>Core Ingestion Infra (Sprint 34)</option>
+                                <option>API Gateway &amp; Envoy Proxy</option>
+                                <option>Data Persistence &amp; Storage</option>
+                            </select>
+                            <span
+                                class="material-symbols-outlined absolute right-2 text-slate-400 pointer-events-none text-base">expand_more</span>
+                        </div>
+                        <button
+                            class="h-9 px-3.5 rounded-lg bg-white border border-surface-border hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
+                            type="button">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <span class="">Record / Ingest Meeting</span>
+                        </button>
+                        <button
+                            class="h-9 px-4 rounded-lg bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-indigo-500/20 transition-all"
+                            type="button">
+                            <span class="material-symbols-outlined text-base">auto_awesome</span>
+                            <span class="">New Catch-up Brief</span>
+                        </button>
+                    </div>
+                </section>
+                <!-- Executive Metrics Grid -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Card 1: Open Tasks -->
+                    <div
+                        class="bg-surface-card rounded-xl p-5 border border-surface-border shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between pb-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Open
+                                Tasks</span>
+                            <span class="material-symbols-outlined text-slate-400 text-lg">check_box</span>
+                        </div>
+                        <div class="flex flex-col gap-0.5 mt-2">
+                            <span class="text-3xl font-extrabold text-slate-900 tracking-tight">42</span>
+                            <span class="text-xs text-slate-500 pt-1">
+                                <strong class="text-slate-800 font-semibold">12</strong> blocking v2.4 • 8 in progress
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Card 2: Overdue Tasks -->
+                    <div
+                        class="bg-surface-card rounded-xl p-5 border border-surface-border shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between pb-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Overdue
+                                Tasks</span>
+                            <span
+                                class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Urgent
+                            </span>
+                        </div>
+                        <div class="flex flex-col gap-0.5 mt-2">
+                            <span class="text-3xl font-extrabold text-rose-600 tracking-tight">3</span>
+                            <span class="text-xs text-slate-500 pt-1">
+                                Avg delay: <strong class="text-slate-800 font-semibold">1.8 days</strong> • 2 escalated
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Card 3: Completed (Last 7d) -->
+                    <div
+                        class="bg-surface-card rounded-xl p-5 border border-surface-border shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between pb-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Completed (Last
+                                7d)</span>
+                            <span
+                                class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-semibold flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span> +14%
+                            </span>
+                        </div>
+                        <div class="flex flex-col gap-0.5 mt-2">
+                            <span class="text-3xl font-extrabold text-indigo-600 tracking-tight">29</span>
+                            <span class="text-xs text-slate-500 pt-1">
+                                Accelerated sprint velocity index
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Card 4: Pending Decision Reviews -->
+                    <div
+                        class="bg-surface-card rounded-xl p-5 border border-surface-border shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between pb-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Decision
+                                Reviews</span>
+                            <span
+                                class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-semibold">
+                                2 Conflicts
+                            </span>
+                        </div>
+                        <div class="flex flex-col gap-0.5 mt-2">
+                            <span class="text-3xl font-extrabold text-slate-900 tracking-tight">5</span>
+                            <span class="text-xs text-slate-500 pt-1">
+                                <span class="text-amber-700 font-semibold">2 integrity conflicts</span> detected
+                            </span>
+                        </div>
+                    </div>
+                </section>
+                <!-- Signature Feature: Decision Integrity Alert -->
+                <section
+                    class="bg-white rounded-xl p-6 border border-surface-border shadow-sm flex flex-col gap-4 relative overflow-hidden">
+                    <div
+                        class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-indigo-500 to-cyan-500">
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                        <div class="flex items-center gap-2.5">
+                            <span
+                                class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 font-bold text-[11px] uppercase tracking-wider border border-amber-200">
+                                Decision Integrity Conflict Detected
+                            </span>
+                            <span class="font-mono text-xs text-slate-500 font-medium">CONF-2024-0982</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-amber-700 text-xs font-semibold">
+                            <span class="material-symbols-outlined text-sm">priority_high</span>
+                            High Architectural Divergence Risk
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <h2 class="text-base font-bold text-slate-900">Architectural Inconsistency Flagged in Today's
+                            Standup</h2>
+                        <p class="text-xs text-slate-600">
+                            During <span class="font-semibold text-slate-900">"Q3 API Gateway Sync"</span> (10:15 AM
+                            today), a proposed change contradicts an earlier approved governance RFC.
+                        </p>
+                    </div>
+                    <!-- Diff / Split Comparison Box -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Historical Decision -->
+                        <div
+                            class="bg-slate-50 rounded-lg p-4 border border-slate-200/80 flex flex-col justify-between">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1.5">
+                                        <span
+                                            class="material-symbols-outlined text-indigo-600 text-base">verified</span>
+                                        <span class="text-xs font-bold text-indigo-900">Approved Decision
+                                            #DEC-2023-89</span>
+                                    </div>
+                                    <span class="text-[11px] text-slate-500">March 14, 2024</span>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed">
+                                    "Authentication tokens must be validated exclusively at the <strong
+                                        class="text-indigo-700 font-semibold">Edge Envoy proxy layer</strong> using
+                                    stateless JWT signatures. Avoid backplane roundtrips to central stores."
+                                </p>
+                            </div>
+                            <div class="pt-3 flex items-center gap-1 text-slate-500 font-mono text-[11px]">
+                                <span class="material-symbols-outlined text-xs">person</span>
+                                Signed off by Marcus Vance (VP Eng)
+                            </div>
+                        </div>
+                        <!-- New Discussion Excerpt -->
+                        <div
+                            class="bg-amber-50/60 rounded-lg p-4 border border-amber-200 flex flex-col justify-between">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-amber-700 text-base">warning</span>
+                                        <span class="text-xs font-bold text-amber-900">New Standup Discussion</span>
+                                    </div>
+                                    <span class="text-[11px] text-slate-500">Today 10:22 AM • David K.</span>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed">
+                                    "Let's route session validation directly through the <strong
+                                        class="text-amber-800 font-semibold">central Auth-Service database
+                                        cluster</strong> to inspect revoked user sessions in real-time."
+                                </p>
+                            </div>
+                            <div class="pt-3 flex items-center gap-1 text-amber-700 font-mono text-[11px]">
+                                <span class="material-symbols-outlined text-xs">alt_route</span>
+                                Contradicts stateless distributed proxy policy
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Impact Summary and Action Bar -->
+                    <div
+                        class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-50 rounded-lg p-3.5 border border-surface-border">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span class="material-symbols-outlined text-rose-600 text-lg shrink-0">report_problem</span>
+                            <p class="text-xs text-slate-700 truncate">
+                                <strong class="font-semibold text-rose-600">Projected Impact:</strong> Latency
+                                regression (+45ms p99 overhead) and edge authentication bypass vulnerability during
+                                traffic spikes.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                            <button
+                                class="h-8 px-3.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
+                                type="button">
+                                <span class="material-symbols-outlined text-sm">event_repeat</span>
+                                <span class="">Schedule Alignment Review</span>
+                            </button>
+                            <button
+                                class="h-8 px-3 rounded-lg bg-white border border-surface-border hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors"
+                                type="button">
+                                Mark as Superseding RFC
+                            </button>
+                            <button
+                                class="h-8 px-2.5 rounded-lg text-slate-500 hover:text-slate-800 text-xs font-medium transition-colors"
+                                type="button">
+                                Dismiss Flag
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                <!-- Main 2-Column Dashboard Grid: 68% / 32% -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Left Column (8 cols of 12) -->
+                    <div class="lg:col-span-8 flex flex-col gap-6">
+                        <!-- Recent Meetings & Syncs Table -->
+                        <section
+                            class="bg-surface-card rounded-xl border border-surface-border shadow-sm overflow-hidden flex flex-col">
+                            <div class="px-6 py-4 flex items-center justify-between border-b border-surface-border">
+                                <div class="flex items-center gap-2.5">
+                                    <h3 class="text-sm font-bold text-slate-900">Recent Meetings &amp; Ingested Syncs
+                                    </h3>
+                                    <span
+                                        class="font-mono text-[11px] px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-medium">4
+                                        active logs</span>
+                                </div>
+                                <a class="text-xs text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1 transition-colors"
+                                    href="#">
+                                    <span class="">View all syncs</span>
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                </a>
+                            </div>
+                            <div class="overflow-x-auto overflow-y-auto max-h-[220px] w-full">
+                                <table class="w-full text-left text-xs">
+                                    <thead
+                                        class="sticky top-0 z-10 bg-slate-50 text-slate-500 uppercase font-semibold text-[11px] border-b border-surface-border backdrop-blur-sm">
+                                        <tr>
+                                            <th class="py-3 px-6">Meeting Name</th>
+                                            <th class="py-3 px-4">Source</th>
+                                            <th class="py-3 px-4">Integrity Status</th>
+                                            <th class="py-3 px-4">Key Decision Takeaway</th>
+                                            <th class="py-3 px-6 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-surface-border">
+                                        <!-- Row 1 -->
+                                        <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="py-3.5 px-6">
+                                                <div class="flex flex-col">
+                                                    <span class="font-semibold text-slate-900">Q3 API Gateway
+                                                        Sync</span>
+                                                    <span class="text-[11px] text-slate-500">45m ago • 8
+                                                        attendees</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-slate-600 font-medium">
+                                                    <span
+                                                        class="material-symbols-outlined text-sm text-slate-400">videocam</span>
+                                                    Google Meet
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-medium text-[11px] inline-flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> 1
+                                                    Conflict
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 text-slate-600">
+                                                Reviewed Auth &amp; Cache layer specs; token strategy challenged.
+                                            </td>
+                                            <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                                <button
+                                                    class="h-7 px-2.5 rounded-md bg-white border border-surface-border hover:bg-slate-50 text-slate-700 font-medium text-xs shadow-none transition-colors"
+                                                    type="button">
+                                                    View Summary
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Row 2 -->
+                                        <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="py-3.5 px-6">
+                                                <div class="flex flex-col">
+                                                    <span class="font-semibold text-slate-900">Core Ingestion Pipeline
+                                                        Handover</span>
+                                                    <span class="text-[11px] text-slate-500">Yesterday • 5
+                                                        attendees</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-slate-600 font-medium">
+                                                    <span
+                                                        class="material-symbols-outlined text-sm text-slate-400">video_chat</span>
+                                                    Zoom
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 font-medium text-[11px] inline-flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span> Verified
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 text-slate-600">
+                                                Transferred operational runbooks to Sarah L.
+                                            </td>
+                                            <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                                <button
+                                                    class="h-7 px-2.5 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs transition-colors"
+                                                    type="button">
+                                                    Brief Ready
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Row 3 -->
+                                        <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="py-3.5 px-6">
+                                                <div class="flex flex-col">
+                                                    <span class="font-semibold text-slate-900">Database Sharding
+                                                        Retrospective</span>
+                                                    <span class="text-[11px] text-slate-500">Nov 18 • 6 attendees</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-slate-600 font-medium">
+                                                    <span
+                                                        class="material-symbols-outlined text-sm text-slate-400">forum</span>
+                                                    Slack Huddle
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 font-medium text-[11px] inline-flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span> Verified
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 text-slate-600">
+                                                Agreed on Vitess migration timeline and rollout canary criteria.
+                                            </td>
+                                            <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                                <button
+                                                    class="h-7 px-2.5 rounded-md bg-white border border-surface-border hover:bg-slate-50 text-slate-700 font-medium text-xs shadow-none transition-colors"
+                                                    type="button">
+                                                    View Notes
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Row 4 -->
+                                        <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="py-3.5 px-6">
+                                                <div class="flex flex-col">
+                                                    <span class="font-semibold text-slate-900">Billing Microservice RFC
+                                                        Review</span>
+                                                    <span class="text-[11px] text-slate-500">Nov 16 • 11
+                                                        attendees</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-slate-600 font-medium">
+                                                    <span
+                                                        class="material-symbols-outlined text-sm text-slate-400">videocam</span>
+                                                    Google Meet
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 whitespace-nowrap">
+                                                <span
+                                                    class="px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 font-medium text-[11px] inline-flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span> Verified
+                                                </span>
+                                            </td>
+                                            <td class="py-3.5 px-4 text-slate-600">
+                                                Adopted Stripe webhook idempotency key schema across workers.
+                                            </td>
+                                            <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                                <button
+                                                    class="h-7 px-2.5 rounded-md bg-white border border-surface-border hover:bg-slate-50 text-slate-700 font-medium text-xs shadow-none transition-colors"
+                                                    type="button">
+                                                    View Decisions
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <!-- Recent Approved Decisions Repository Log -->
+                        <section
+                            class="bg-surface-card rounded-xl p-6 border border-surface-border shadow-sm flex flex-col gap-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
+                                    <h3 class="text-sm font-bold text-slate-900">Recent Approved Decisions</h3>
+                                    <span class="text-xs text-slate-500">Canonical Knowledge Ledger</span>
+                                </div>
+                                <button
+                                    class="text-xs text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1 transition-colors"
+                                    type="button">
+                                    <span class="">Decision Logbook</span>
+                                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+                                </button>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <!-- DEC-2024-112 -->
+                                <div
+                                    class="p-4 rounded-lg bg-slate-50 hover:bg-slate-100/70 border border-surface-border transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div class="flex flex-col gap-1 min-w-0">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <span
+                                                class="font-mono text-xs font-bold text-indigo-600">DEC-2024-112</span>
+                                            <span
+                                                class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[11px] font-medium">#observability</span>
+                                            <span
+                                                class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[11px] font-medium">#infra</span>
+                                        </div>
+                                        <h4 class="text-xs font-semibold text-slate-900 pt-0.5">
+                                            Adopt OpenTelemetry for distributed trace propagation across all Go
+                                            microservices
+                                        </h4>
+                                        <p class="text-xs text-slate-500">
+                                            Mandatory context propagation header standards (<span
+                                                class="font-mono text-[11px]">traceparent</span>) applied to grpc
+                                            middleware.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-3 shrink-0 text-right">
+                                        <div class="flex flex-col">
+                                            <span class="text-xs text-slate-900 font-semibold">Sarah Chen</span>
+                                            <span class="text-[11px] text-slate-500">Approved 2d ago</span>
+                                        </div>
+                                        <span class="material-symbols-outlined text-cyan-600 text-xl">verified</span>
+                                    </div>
+                                </div>
+                                <!-- DEC-2024-108 -->
+                                <div
+                                    class="p-4 rounded-lg bg-slate-50 hover:bg-slate-100/70 border border-surface-border transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div class="flex flex-col gap-1 min-w-0">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <span
+                                                class="font-mono text-xs font-bold text-indigo-600">DEC-2024-108</span>
+                                            <span
+                                                class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[11px] font-medium">#api-spec</span>
+                                            <span
+                                                class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[11px] font-medium">#deprecation</span>
+                                        </div>
+                                        <h4 class="text-xs font-semibold text-slate-900 pt-0.5">
+                                            Deprecate legacy gRPC v1 endpoints by end of Q4
+                                        </h4>
+                                        <p class="text-xs text-slate-500">
+                                            Traffic will receive progressive brownout injection starting November 25 to
+                                            force legacy client migration.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-3 shrink-0 text-right">
+                                        <div class="flex flex-col">
+                                            <span class="text-xs text-slate-900 font-semibold">Elena Rostova</span>
+                                            <span class="text-[11px] text-slate-500">Approved 5d ago</span>
+                                        </div>
+                                        <span class="material-symbols-outlined text-cyan-600 text-xl">verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- Right Column (4 cols of 12) -->
+                    <div class="lg:col-span-4 flex flex-col gap-6">
+                        <!-- Work Continuity & Handover Feed -->
+                        <section
+                            class="bg-surface-card rounded-xl p-5 border border-surface-border shadow-sm flex flex-col gap-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-slate-900">Continuity Handover</h3>
+                                <span
+                                    class="text-[11px] px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 font-semibold">Active
+                                    Cycle</span>
+                            </div>
+                            <!-- Handover summary card -->
+                            <div class="p-4 rounded-lg bg-slate-50 border border-surface-border flex flex-col gap-3">
+                                <div class="flex items-center justify-between">
+                                    <span
+                                        class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Leadership
+                                        Handover</span>
+                                    <span class="font-mono text-xs text-indigo-600 font-bold">80% transferred</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-slate-800">
+                                    <span class="font-semibold">Marcus V.</span>
+                                    <span class="material-symbols-outlined text-slate-400 text-sm">arrow_forward</span>
+                                    <span class="font-semibold text-indigo-600">Sarah L.</span>
+                                </div>
+                                <!-- Progress bar in gradient -->
+                                <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-gradient-to-r from-indigo-500 to-cyan-500 h-full rounded-full"
+                                        style="width: 80%;"></div>
+                                </div>
+                                <p class="text-xs text-slate-500">
+                                    <strong class="text-slate-800 font-semibold">14 of 16</strong> critical knowledge
+                                    assets &amp; runbooks fully acknowledged.
+                                </p>
+                            </div>
+                            <!-- Pending Handover Action alert -->
+                            <div class="p-4 rounded-lg bg-amber-50/60 border border-amber-200 flex flex-col gap-2">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-amber-700 text-sm">schedule</span>
+                                    <span class="text-xs font-semibold text-amber-800">Action Needed by Sarah L.</span>
+                                </div>
+                                <p class="text-xs font-semibold text-slate-900">
+                                    Review Infrastructure Runbook for Cluster Failover
+                                </p>
+                                <p class="text-xs text-slate-600">
+                                    Requires explicit confirmation before Marcus's upcoming transition date (Friday).
+                                </p>
+                                <div class="pt-1.5">
+                                    <button
+                                        class="w-full h-8 rounded-lg bg-white border border-amber-200 hover:bg-amber-50 text-slate-800 text-xs font-semibold transition-colors shadow-sm"
+                                        type="button">
+                                        Open Handover Checklist
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Recent Task Activity Feed -->
+                        <section
+                            class="bg-surface-card rounded-xl p-5 border border-surface-border shadow-sm flex flex-col gap-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-slate-900">Recent Task Activity</h3>
+                                <span class="text-xs text-slate-500">Realtime feed</span>
+                            </div>
+                            <div class="relative flex flex-col gap-5 pl-1.5">
+                                <!-- Timeline Line -->
+                                <div class="absolute left-2.5 top-2 bottom-2 w-0.5 bg-slate-200"></div>
+                                <!-- Timeline Item 1 -->
+                                <div class="relative pl-6 flex flex-col gap-1">
+                                    <span
+                                        class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-cyan-500 ring-4 ring-cyan-100"></span>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-semibold text-slate-900">David K.</span>
+                                        <span class="font-mono text-[11px] text-slate-400">32m ago</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600">
+                                        Completed <span class="font-semibold text-slate-800">Deploy envoy rate-limiting
+                                            hotfix</span> on cluster <span
+                                            class="font-mono text-[11px] text-indigo-600">us-east-1</span>.
+                                    </p>
+                                </div>
+                                <!-- Timeline Item 2 -->
+                                <div class="relative pl-6 flex flex-col gap-1">
+                                    <span
+                                        class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-indigo-600 ring-4 ring-indigo-100"></span>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-semibold text-slate-900">RELAY Bot</span>
+                                        <span class="font-mono text-[11px] text-slate-400">45m ago</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600">
+                                        Synced 14 action items from <span class="font-semibold text-slate-800">Q3 API
+                                            Gateway Sync</span> directly into Jira and Linear backlogs.
+                                    </p>
+                                </div>
+                                <!-- Timeline Item 3 -->
+                                <div class="relative pl-6 flex flex-col gap-1">
+                                    <span
+                                        class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-slate-400 ring-4 ring-slate-100"></span>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-semibold text-slate-900">Elena Rostova</span>
+                                        <span class="font-mono text-[11px] text-slate-400">2h ago</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600">
+                                        Assigned <span class="font-semibold text-slate-800">Investigate edge token
+                                            revocation</span> to Security Ops team.
+                                    </p>
+                                </div>
+                                <!-- Timeline Item 4 -->
+                                <div class="relative pl-6 flex flex-col gap-1">
+                                    <span
+                                        class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-cyan-500 ring-4 ring-cyan-100"></span>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-semibold text-slate-900">Sarah L.</span>
+                                        <span class="font-mono text-[11px] text-slate-400">4h ago</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600">
+                                        Acknowledged handover package <span
+                                            class="font-semibold text-slate-800">Disaster Recovery Runbook v2</span>.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+</body>
+
+</html>

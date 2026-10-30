@@ -1,0 +1,23 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# node / build
+node_modules/
+frontend/dist/
+
+# local data & logs
+*.db
+*.sqlite3
+backend/logs/
+*.jsonl
+.pgdata/
+*.tsbuildinfo

@@ -1,0 +1,9 @@
+.venv
+**/node_modules
+frontend/dist
+**/__pycache__
+backend/logs
+*.db
+.env
+.git
+design-reference

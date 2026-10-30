@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: relay
+    runtime: docker
+    plan: free
+    region: frankfurt     # co-locate with Supabase eu-central-1; each request makes several DB round trips
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # Supabase session-pooler URI, set in the Render dashboard
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: LOG_FILE_PATH
+        value: /tmp/relay.jsonl
+      - key: SEED_DEMO_DATA
+        value: "true"
